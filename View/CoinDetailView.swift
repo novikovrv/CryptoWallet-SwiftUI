@@ -49,13 +49,13 @@ struct CoinDetailView: View {
     }
 }
 #Preview {
-    CoinDetailView(
-        coin: Coin(
-            id: UUID(),
-            name: "Bitcoin",
-            price: 65000.0,
-            description: "Первая и самая популярная криптовалюта в мире.",
-            priceChange24h: -2.5
-        )
-    )
+//    CoinDetailView(
+//        coin: Coin(
+//            id: UUID(),
+//            name: "Bitcoin",
+//            price: 65000.0,
+//            description: "Первая и самая популярная криптовалюта в мире.",
+//            priceChange24h: -2.5
+//        )
+//    )
 }

@@ -11,24 +11,19 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		1D5030533093400A0050B38B /* CoreData */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = CoreData;
-			sourceTree = "<group>";
-		};
 		1D5030543093404C0050B38B /* Extensions */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		1D7B69F5309B39D100A2A417 /* Model */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Model;
+			sourceTree = "<group>";
+		};
 		1D9957A6307502F900A07820 /* CryptoCurrencyWallet */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = CryptoCurrencyWallet;
-			sourceTree = "<group>";
-		};
-		1D9957B33075038000A07820 /* Model */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Model;
 			sourceTree = "<group>";
 		};
 		1D9957B53075039700A07820 /* View */ = {
@@ -56,12 +51,11 @@
 			isa = PBXGroup;
 			children = (
 				1D5030543093404C0050B38B /* Extensions */,
-				1D5030533093400A0050B38B /* CoreData */,
 				1D9957A6307502F900A07820 /* CryptoCurrencyWallet */,
 				1D9957A5307502F900A07820 /* Products */,
-				1D9957B33075038000A07820 /* Model */,
 				1D9957B53075039700A07820 /* View */,
 				1D9957B7307503AA00A07820 /* ViewModel */,
+				1D7B69F5309B39D100A2A417 /* Model */,
 			);
 			sourceTree = "<group>";
 		};
@@ -87,10 +81,9 @@
 			buildRules = (
 			);
 			fileSystemSynchronizedGroups = (
-				1D5030533093400A0050B38B /* CoreData */,
 				1D5030543093404C0050B38B /* Extensions */,
+				1D7B69F5309B39D100A2A417 /* Model */,
 				1D9957A6307502F900A07820 /* CryptoCurrencyWallet */,
-				1D9957B33075038000A07820 /* Model */,
 				1D9957B53075039700A07820 /* View */,
 				1D9957B7307503AA00A07820 /* ViewModel */,
 			);

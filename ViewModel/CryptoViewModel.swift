@@ -6,30 +6,45 @@
 //
 
 import Foundation
-import CoreData
+import SwiftData
 
 @Observable
 @MainActor
 class CryptoViewModel {
     var coins: [Coin] = []
     private var network = CryptoManager()
-    private let coreDataManager = CoreDataManager.shared
     
-    func fetchLocalCoins(){
-        let context = coreDataManager.viewContext
-        let request: NSFetchRequest<CDCoin> = CDCoin.fetchRequest()
+    private var modelContext: ModelContext?
+    
+    init(modelContext: ModelContext? = nil){
+        self.modelContext = modelContext
+    }
+    
+    func updateContext(_ context: ModelContext){
+        self.modelContext = context
+    }
+    
+    func fetchLocalCoins() {
+        guard let context = modelContext else { return }
+        
+        // Создаем простой дескриптор запроса (аналог NSFetchRequest)
+        let descriptor = FetchDescriptor<SDCoin>()
+        
         do {
-            let localCDCoins = try context.fetch(request)
-            self.coins = localCDCoins.map{ $0.coinsFromCoreDataToSwiftUIModel }
-
-            print("Из кордата извлечено монет: \(self.coins.count)")
+            let localSDCoins = try context.fetch(descriptor)
+            
+            // Маппим SwiftData-модели в обычные структуры для UI
+            self.coins = localSDCoins
+                .map(Coin.init)
+                .sorted{$0.name < $1.name}
+            print("📦 Из SwiftData извлечено монет: \(self.coins.count)")
         } catch {
-            print("Ошибка выборки CoreData: \(error)")
+            print("❌ Ошибка выборки SwiftData: \(error)")
         }
     }
     
     func loadCryptoData() async {
-        fetchLocalCoins()
+        guard let context = modelContext else {return}
         let coinNames = ["BTC", "ETH", "SOUL"]
         var loadedCoins: [Coin] = []
         let networkManager = self.network
@@ -51,21 +66,21 @@ class CryptoViewModel {
                 }
             }
         }
-        let context = coreDataManager.viewContext
-        let deleteRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CDCoin")
-        let deleteOrder = NSBatchDeleteRequest(fetchRequest: deleteRequest)
-        _ = try? context.execute(deleteOrder)
-        
-        for coin in loadedCoins {
-            let newCDCoin = CDCoin(context: context)
-            newCDCoin.id = coin.id
-            newCDCoin.name = coin.name
-            newCDCoin.price = coin.price
-            newCDCoin.descriptionText = coin.description
-            newCDCoin.priceChange24h = coin.priceChange24h
+        do {
+            try context.delete(model: SDCoin.self)
+            
+            
+            for coin in loadedCoins {
+                let newSDCoin =  SDCoin(from: coin)
+                context.insert(newSDCoin) // Просто вставляем объект в контекст
+            }
+            try context.save()
+            print("💾 SwiftData: Кэш успешно перезаписан на диск!")
+            
+        } catch {
+            print("❌ Ошибка сохранения SwiftData: \(error)")
         }
-        coreDataManager.saveContext()
-        self.coins = loadedCoins
+        fetchLocalCoins()
     }
     
 }

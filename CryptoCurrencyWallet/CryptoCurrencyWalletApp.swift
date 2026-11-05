@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct CryptoCurrencyWalletApp: App {
@@ -13,5 +14,6 @@ struct CryptoCurrencyWalletApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: SDCoin.self)
     }
 }

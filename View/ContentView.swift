@@ -6,8 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    // Получаем контекст SwiftData из окружения системы
+    @Environment(\.modelContext) private var modelContext
+    
     @State private var viewModel = CryptoViewModel()
     var body: some View {
         NavigationStack {
@@ -18,42 +22,39 @@ struct ContentView: View {
                             .font(.headline)
                         Spacer()
                         Text(coin.price.formatted(.currency(code: "USD")))
-                        //Text("\(coin.price)")
-                        //Text(coin.price.formatted())
-                       // Text(String(format: "$%.2f", coin.price))
                             .font(.subheadline)
-                            //.foregroundColor(.gray)
                     }
                 }
             }
             .navigationTitle("Крипто-Кошелек")
             .navigationDestination(for: Coin.self){ selectedCoin in
                 CoinDetailView(coin:selectedCoin)
- 
+                
             }
             .task {
+                viewModel.updateContext(modelContext)
+                viewModel.fetchLocalCoins()
                 await viewModel.loadCryptoData()
             }
             .refreshable {
                 await viewModel.loadCryptoData()
             }
         }
-        
-        VStack {
-            Image(systemName: "sun.max.circle.fill")
-                .imageScale(.large)
-            //.foregroundStyle(.tint)
-                .font(.system(size: 210))
-                //.foregroundColor(.orange)
-                .shadow(color: .black, radius: 10, x: 0, y: 20)
-            
-            Text("Hello, world!")
-        }
-        .padding()
     }
 }
 
 #Preview {
     
-    ContentView()
+//    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+//    let container = try! ModelContainer(for: SDCoin.self, configurations: config)
+//    let mockCoins = [
+//        SDCoin(name: "Bitcoin", price: 68500.0, descriptionText: "Digital Gold", priceChange24h: 1.5),
+//        SDCoin(name: "Ethereum", price: 2700.0, descriptionText: "Smart Contracts", priceChange24h: -0.8),
+//        SDCoin(name: "Solana", price: 165.0, descriptionText: "Fast Blockchain", priceChange24h: 4.2)
+//    ]
+//    for coin in mockCoins {
+//        container.mainContext.insert(coin)
+//    }
+//    return ContentView()
+//        .modelContainer(container)
 }
