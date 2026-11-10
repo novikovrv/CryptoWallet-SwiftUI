@@ -6,9 +6,42 @@
 	objectVersion = 110;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		1DBEB369309C7C6C00F486F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1D99579C307502F900A07820 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1D9957A3307502F900A07820;
+			remoteInfo = CryptoCurrencyWallet;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		1D9957A4307502F900A07820 /* CryptoCurrencyWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoCurrencyWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DBEB365309C7C6C00F486F2 /* CryptoCurrencyWalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CryptoCurrencyWalletTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		1DBEB372309DBF7F00F486F2 /* Exceptions for "Storage" folder in "CryptoCurrencyWallet" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				CryptoRepository.swift,
+				Entities/SDCoin.swift,
+				Migration/SDCoinMigrationPlan.swift,
+				Migration/SDCoinSchemas.swift,
+				Network/CryptoDTO.swift,
+				Network/CryptoManager.swift,
+			);
+			target = 1D9957A3307502F900A07820 /* CryptoCurrencyWallet */;
+		};
+		1DBEB3C830A1CF6C00F486F2 /* Exceptions for "Contracts" folder in "CryptoCurrencyWallet" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				CryptoServices.swift,
+			);
+			target = 1D9957A3307502F900A07820 /* CryptoCurrencyWallet */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		1D5030543093404C0050B38B /* Extensions */ = {
@@ -36,10 +69,36 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		1DBEB366309C7C6C00F486F2 /* CryptoCurrencyWalletTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CryptoCurrencyWalletTests;
+			sourceTree = "<group>";
+		};
+		1DBEB370309DBF4800F486F2 /* Storage */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1DBEB372309DBF7F00F486F2 /* Exceptions for "Storage" folder in "CryptoCurrencyWallet" target */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		1DBEB3C530A1CC3000F486F2 /* Contracts */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1DBEB3C830A1CF6C00F486F2 /* Exceptions for "Contracts" folder in "CryptoCurrencyWallet" target */,
+			);
+			path = Contracts;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		1D9957A1307502F900A07820 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		1DBEB362309C7C6C00F486F2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
 			);
@@ -50,12 +109,14 @@
 		1D99579B307502F900A07820 = {
 			isa = PBXGroup;
 			children = (
-				1D5030543093404C0050B38B /* Extensions */,
 				1D9957A6307502F900A07820 /* CryptoCurrencyWallet */,
+				1DBEB366309C7C6C00F486F2 /* CryptoCurrencyWalletTests */,
 				1D9957A5307502F900A07820 /* Products */,
 				1D9957B53075039700A07820 /* View */,
 				1D9957B7307503AA00A07820 /* ViewModel */,
 				1D7B69F5309B39D100A2A417 /* Model */,
+				1DBEB36E309DBF0400F486F2 /* Services */,
+				1D5030543093404C0050B38B /* Extensions */,
 			);
 			sourceTree = "<group>";
 		};
@@ -63,8 +124,18 @@
 			isa = PBXGroup;
 			children = (
 				1D9957A4307502F900A07820 /* CryptoCurrencyWallet.app */,
+				1DBEB365309C7C6C00F486F2 /* CryptoCurrencyWalletTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		1DBEB36E309DBF0400F486F2 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				1DBEB3C530A1CC3000F486F2 /* Contracts */,
+				1DBEB370309DBF4800F486F2 /* Storage */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -92,6 +163,27 @@
 			productReference = 1D9957A4307502F900A07820 /* CryptoCurrencyWallet.app */;
 			productType = "com.apple.product-type.application";
 		};
+		1DBEB364309C7C6C00F486F2 /* CryptoCurrencyWalletTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DBEB36D309C7C6C00F486F2 /* Build configuration list for PBXNativeTarget "CryptoCurrencyWalletTests" */;
+			buildPhases = (
+				1DBEB361309C7C6C00F486F2 /* Sources */,
+				1DBEB362309C7C6C00F486F2 /* Frameworks */,
+				1DBEB363309C7C6C00F486F2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1DBEB36A309C7C6C00F486F2 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				1DBEB366309C7C6C00F486F2 /* CryptoCurrencyWalletTests */,
+			);
+			name = CryptoCurrencyWalletTests;
+			productName = CryptoCurrencyWalletTests;
+			productReference = 1DBEB365309C7C6C00F486F2 /* CryptoCurrencyWalletTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -104,6 +196,10 @@
 				TargetAttributes = {
 					1D9957A3307502F900A07820 = {
 						CreatedOnToolsVersion = 27.0;
+					};
+					1DBEB364309C7C6C00F486F2 = {
+						CreatedOnToolsVersion = 27.0;
+						TestTargetID = 1D9957A3307502F900A07820;
 					};
 				};
 			};
@@ -122,12 +218,18 @@
 			projectRoot = "";
 			targets = (
 				1D9957A3307502F900A07820 /* CryptoCurrencyWallet */,
+				1DBEB364309C7C6C00F486F2 /* CryptoCurrencyWalletTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		1D9957A2307502F900A07820 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		1DBEB363309C7C6C00F486F2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
 			);
@@ -140,7 +242,20 @@
 			files = (
 			);
 		};
+		1DBEB361309C7C6C00F486F2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1DBEB36A309C7C6C00F486F2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1D9957A3307502F900A07820 /* CryptoCurrencyWallet */;
+			targetProxy = 1DBEB369309C7C6C00F486F2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1D9957AD307502FB00A07820 /* Debug configuration for PBXProject "CryptoCurrencyWallet" */ = {
@@ -324,6 +439,46 @@
 			};
 			name = Release;
 		};
+		1DBEB36B309C7C6C00F486F2 /* Debug configuration for PBXNativeTarget "CryptoCurrencyWalletTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "-.CryptoCurrencyWalletTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CryptoCurrencyWallet.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CryptoCurrencyWallet";
+			};
+			name = Debug;
+		};
+		1DBEB36C309C7C6C00F486F2 /* Release configuration for PBXNativeTarget "CryptoCurrencyWalletTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "-.CryptoCurrencyWalletTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CryptoCurrencyWallet.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CryptoCurrencyWallet";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -340,6 +495,14 @@
 			buildConfigurations = (
 				1D9957B0307502FB00A07820 /* Debug configuration for PBXNativeTarget "CryptoCurrencyWallet" */,
 				1D9957B1307502FB00A07820 /* Release configuration for PBXNativeTarget "CryptoCurrencyWallet" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		1DBEB36D309C7C6C00F486F2 /* Build configuration list for PBXNativeTarget "CryptoCurrencyWalletTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DBEB36B309C7C6C00F486F2 /* Debug configuration for PBXNativeTarget "CryptoCurrencyWalletTests" */,
+				1DBEB36C309C7C6C00F486F2 /* Release configuration for PBXNativeTarget "CryptoCurrencyWalletTests" */,
 			);
 			defaultConfigurationName = Release;
 		};

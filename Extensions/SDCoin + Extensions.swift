@@ -13,7 +13,7 @@ extension SDCoin {
             id: coin.id,
             name: coin.name,
             price: coin.price,
-            details: coin.description,
+            descriptionText: coin.description,
             priceChange24h: coin.priceChange24h
         )
     }

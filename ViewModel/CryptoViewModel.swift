@@ -6,81 +6,66 @@
 //
 
 import Foundation
-import SwiftData
+
 
 @Observable
 @MainActor
 class CryptoViewModel {
     var coins: [Coin] = []
-    private var network = CryptoManager()
+    private let network: CryptoNetworkServiceProtocol
+    private var repository: CryptoStorageServiceProtocol?
+    private let coinNames = ["BTC", "ETH", "SOUL"]
     
-    private var modelContext: ModelContext?
-    
-    init(modelContext: ModelContext? = nil){
-        self.modelContext = modelContext
+    // пишем опициональный инициализатор так как view model model создается раньше,
+    // чем контекст @Environment(\.modelContext) загружается в View
+    init(network: CryptoNetworkServiceProtocol = CryptoManager(), repository: CryptoStorageServiceProtocol? = nil){
+        self.network = network
+        self.repository = repository
     }
-    
-    func updateContext(_ context: ModelContext){
-        self.modelContext = context
+    func updateRepository(with repository: CryptoStorageServiceProtocol) {
+        self.repository = repository
     }
     
     func fetchLocalCoins() {
-        guard let context = modelContext else { return }
-        
-        // Создаем простой дескриптор запроса (аналог NSFetchRequest)
-        let descriptor = FetchDescriptor<SDCoin>()
-        
-        do {
-            let localSDCoins = try context.fetch(descriptor)
-            
-            // Маппим SwiftData-модели в обычные структуры для UI
-            self.coins = localSDCoins
-                .map(Coin.init)
-                .sorted{$0.name < $1.name}
-            print("📦 Из SwiftData извлечено монет: \(self.coins.count)")
-        } catch {
-            print("❌ Ошибка выборки SwiftData: \(error)")
+        guard let repository = repository else {
+            print("⚠️ ViewModel: Репозиторий не инициализирован (отсутствует ModelContext)")
+            return
         }
+        self.coins = repository.fetchLocalCoins()
+        print("📦 ViewModel: Данные UI обновлены из SwiftData (\(self.coins.count) шт.)")
     }
     
     func loadCryptoData() async {
-        guard let context = modelContext else {return}
-        let coinNames = ["BTC", "ETH", "SOUL"]
-        var loadedCoins: [Coin] = []
-        let networkManager = self.network
-        await withTaskGroup(of: (String, Double, String, Double)?.self) { group in
-            for coinName in coinNames {
-                group.addTask {
-                    do {
-                        let (price, description, changing) = try await networkManager.fetchCrypto(for: coinName)
-                        return (coinName, price, description, changing)
-                    } catch {
-                        print("Error to access coin \(coinName) \(error)")
-                        return nil
-                    }
-                }
-            }
-            for await result in group {
-                if let (name, price, description, changing) = result {
-                    loadedCoins.append(Coin(id: UUID(), name: name, price: price, description: description, priceChange24h: changing))
-                }
-            }
+        guard let repository = repository else { return }
+        
+        print("🌐 ViewModel: Запуск фонового обновления данных...")
+        
+        // Шаг A: Идем в сеть за сырыми данными (CryptoManager ничего не знает о Coin)
+        let rawDTOs = await network.fetchAllCrypto(names: coinNames)
+        
+        guard !rawDTOs.isEmpty else {
+            print("⚠️ ViewModel: Сеть вернула пустой список, кэш не перезаписывается")
+            return
         }
-        do {
-            try context.delete(model: SDCoin.self)
+        
+        // Шаг B: Превращаем сырые DTO в готовые UI-структуры Coin (Маппинг)
+        let freshCoins = rawDTOs.map { dto in
+            // Важная оптимизация: ищем, была ли эта монета на экране раньше.
+            // Если была — сохраняем её UUID, чтобы у SwiftUI не ломались анимации.
+            let existingId = self.coins.first(where: { $0.name == dto.name })?.id
             
-            
-            for coin in loadedCoins {
-                let newSDCoin =  SDCoin(from: coin)
-                context.insert(newSDCoin) // Просто вставляем объект в контекст
-            }
-            try context.save()
-            print("💾 SwiftData: Кэш успешно перезаписан на диск!")
-            
-        } catch {
-            print("❌ Ошибка сохранения SwiftData: \(error)")
+            return Coin(
+                   id: existingId ?? UUID(),
+                   name: dto.name,
+                   price: dto.price,
+                   description: dto.description,
+                   priceChange24h: dto.change
+               )
         }
+        // Шаг C: Отдаем новые монеты репозиторию на сохранение в SwiftData
+        repository.saveCoins(freshCoins)
+        
+        // Шаг D: Перечитываем базу данных, чтобы синхронизировать UI-состояние
         fetchLocalCoins()
     }
-    
 }

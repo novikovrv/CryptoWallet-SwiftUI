@@ -5,4 +5,4 @@
 //  Created by Руслан Новиков on 02.11.2026.
 //
 
-typealias SDCoin = SDCoinSchemaV2.SDCoinV2
+typealias SDCoin = SDCoinSchemaV1.SDCoinV1

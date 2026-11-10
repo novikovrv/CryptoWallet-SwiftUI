@@ -9,7 +9,7 @@ extension Coin{
         self.id = sdCoin.id
         self.name = sdCoin.name
         self.price = sdCoin.price
-        self.description = sdCoin.details
+        self.description = sdCoin.descriptionText
         self.priceChange24h = sdCoin.priceChange24h
     }
 }
