@@ -14,7 +14,7 @@ class CryptoViewModel {
     var coins: [Coin] = []
     private let network: CryptoNetworkServiceProtocol
     private var repository: CryptoStorageServiceProtocol?
-    private let coinNames = ["BTC", "ETH", "SOUL"]
+    private let coinNames = ["BTC", "ETH", "NEAR", "SOUL"]
     
     // пишем опициональный инициализатор так как view model model создается раньше,
     // чем контекст @Environment(\.modelContext) загружается в View

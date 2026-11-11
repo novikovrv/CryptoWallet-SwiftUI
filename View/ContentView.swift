@@ -35,7 +35,10 @@ struct ContentView: View {
                 let realRepository = CryptoRepository(context: modelContext)
                 viewModel.updateRepository(with: realRepository)
                 viewModel.fetchLocalCoins()
-                await viewModel.loadCryptoData()
+                while !Task.isCancelled {
+                    await viewModel.loadCryptoData()
+                    try? await Task.sleep(for: .seconds(30))
+                }
             }
             .refreshable {
                 await viewModel.loadCryptoData()
@@ -45,17 +48,8 @@ struct ContentView: View {
 }
 
 #Preview {
-    
-    //    let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    //    let container = try! ModelContainer(for: SDCoin.self, configurations: config)
-    //    let mockCoins = [
-    //        SDCoin(name: "Bitcoin", price: 68500.0, descriptionText: "Digital Gold", priceChange24h: 1.5),
-    //        SDCoin(name: "Ethereum", price: 2700.0, descriptionText: "Smart Contracts", priceChange24h: -0.8),
-    //        SDCoin(name: "Solana", price: 165.0, descriptionText: "Fast Blockchain", priceChange24h: 4.2)
-    //    ]
-    //    for coin in mockCoins {
-    //        container.mainContext.insert(coin)
-    //    }
-    //    return ContentView()
-    //        .modelContainer(container)
+    ContentView()
+           // Создает временную базу SwiftData в оперативной памяти специально для холста
+           .modelContainer(for: SDCoin.self, inMemory: true)
+   
 }
