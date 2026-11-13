@@ -7,6 +7,14 @@
 
 import Foundation
 
+// чистая транспортная модель
+nonisolated struct CryptoDTO: Sendable {
+    let name: String
+    let price: Double
+    let description: String
+    let change: Double
+}
+
 // Модель для парсинга JSON от эндпоинта /api/v3/simple/price
 nonisolated struct CoinPriceInfo: Decodable, Sendable {
     let usd: Double
@@ -18,10 +26,16 @@ nonisolated struct CoinPriceInfo: Decodable, Sendable {
     }
 }
 
-// Ваша чистая транспортная модель (остается без изменений)
-nonisolated struct CryptoDTO: Sendable {
-    let name: String
-    let price: Double
-    let description: String
-    let change: Double
+
+// 1. Модель для парсинга JSON от CoinGecko
+nonisolated struct MarketChartResponse: Decodable, Sendable {
+    let prices: [[Double]]
 }
+
+// 2. Чистая модель точки для графика SwiftUI Charts
+nonisolated struct PricePoint: Identifiable, Sendable {
+    let id = UUID()
+    let date: Date
+    let price: Double
+}
+

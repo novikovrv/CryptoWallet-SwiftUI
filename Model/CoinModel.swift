@@ -13,5 +13,3 @@ struct Coin: Identifiable, Codable, Hashable {
     let description: String
     let priceChange24h: Double
 }
-
-

@@ -16,7 +16,7 @@ class CryptoViewModel {
     private var repository: CryptoStorageServiceProtocol?
     private let coinNames = ["BTC", "ETH", "NEAR", "SOUL"]
     
-    // пишем опициональный инициализатор так как view model model создается раньше,
+    // пишем опициональный инициализатор так как view model создается раньше,
     // чем контекст @Environment(\.modelContext) загружается в View
     init(network: CryptoNetworkServiceProtocol = CryptoManager(), repository: CryptoStorageServiceProtocol? = nil){
         self.network = network

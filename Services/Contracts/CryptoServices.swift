@@ -9,6 +9,7 @@ import Foundation
 
 protocol CryptoNetworkServiceProtocol: Sendable {
     func fetchAllCrypto(names: [String]) async -> [CryptoDTO]
+    func fetchWeeklyChart(for symbol: String) async throws -> [PricePoint]
 }
 
 @MainActor

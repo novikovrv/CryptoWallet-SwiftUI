@@ -34,40 +34,20 @@ nonisolated final class CryptoManager: CryptoNetworkServiceProtocol {
         let ids = names.compactMap { coinIdMap[$0.uppercased()] }.joined(separator: ",")
         guard !ids.isEmpty else { return [] }
         
-        // 2. Безопасно собираем URL через URLComponents
-        var components = URLComponents()
-        components.scheme = "https"
-        components.host = "api" + ".coingecko.com"
-        components.path = "/api/v3/simple/price"
-        components.queryItems = [
+        let queryItems = [
             URLQueryItem(name: "ids", value: ids),
             URLQueryItem(name: "vs_currencies", value: "usd"),
             URLQueryItem(name: "include_24hr_change", value: "true")
         ]
         
-        guard let url = components.url else {
-            print("❌ Сеть: Не удалось собрать URL")
-            return []
-        }
-        print("❌ Сеть: Удалось собрать \(url)")
-        
         do {
             // 3. Выполняем запрос в сеть
-            let (data, response) = try await URLSession.shared.data(from: url)
+            let decodedPrices: [String: CoinPriceInfo] = try await performRequest(
+                path: "/api/v3/simple/price",
+                queryItems: queryItems
+            )
             
-            guard let httpResponse = response as? HTTPURLResponse else {
-                throw NetworkError.badServerResponse(statusCode: 0)
-            }
-            //200 - 299 это успешний запрос
-            guard (200...299).contains(httpResponse.statusCode) else {
-                print("❌ Сеть: Сервер вернул статус \(httpResponse.statusCode)")
-                throw NetworkError.badServerResponse(statusCode: httpResponse.statusCode)
-            }
-            
-            // 4. Декодируем JSON в словарь [IDМонеты: Данные]
-            let decodedPrices = try JSONDecoder().decode([String: CoinPriceInfo].self, from: data)
-            
-            // 5. Превращаем ответ сервера в чистые CryptoDTO для ViewModel
+            // 4. Превращаем ответ сервера в чистые CryptoDTO для ViewModel
             var resultDTOs: [CryptoDTO] = []
             
             for ticker in names {
@@ -92,5 +72,56 @@ nonisolated final class CryptoManager: CryptoNetworkServiceProtocol {
             print("❌ Ошибка сети: \(error.localizedDescription)")
             return []
         }
+    }
+    
+    // MARK: - Загрузка графика за 7 дней (тоже максимально чисто!)
+    func fetchWeeklyChart(for symbol: String) async throws -> [PricePoint] {
+        guard let coinId = coinIdMap[symbol.uppercased()] else {
+            throw NetworkError.invalidURL
+        }
+        
+        let queryItems = [
+            URLQueryItem(name: "vs_currency", value: "usd"),
+            URLQueryItem(name: "days", value: "7")
+        ]
+        
+        // Используем тот же самый универсальный метод!
+        let chartResponse: MarketChartResponse = try await performRequest(
+            path: "/api/v3/coins/\(coinId)/market_chart",
+            queryItems: queryItems
+        )
+        
+        return chartResponse.prices.compactMap { pair in
+            guard pair.count >= 2 else { return nil }
+            // Берем первый элемент массива (индекс 0) — это время в миллисекундах
+            let date = Date(timeIntervalSince1970: pair[0] / 1000.0)
+            // Берем второй элемент массива (индекс 1) — это сама цена
+            return PricePoint(date: date, price: pair[1])
+        }
+    }
+    
+    // MARK: - Единый универсальный движок для всех сетевых запросов (DRY)
+    private func performRequest<T: Decodable> (path: String, queryItems: [URLQueryItem]) async throws -> T {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "api" + ".coingecko.com"
+        components.path = path
+        components.queryItems = queryItems
+        guard let url = components.url else {
+            throw NetworkError.invalidURL
+        }
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NetworkError.badServerResponse(statusCode: 0)
+        }
+        //200 - 299 это успешний запрос
+        guard (200...299).contains(httpResponse.statusCode) else {
+            print("❌ Сеть: Сервер вернул статус \(httpResponse.statusCode)")
+            throw NetworkError.badServerResponse(statusCode: httpResponse.statusCode)
+        }
+        
+        // 4. Декодируем JSON в словарь [IDМонеты: Данные]
+        return try JSONDecoder().decode(T.self, from: data)
     }
 }

@@ -14,6 +14,9 @@ nonisolated final class MockCryptoNetwork: CryptoNetworkServiceProtocol {
     func fetchAllCrypto(names: [String]) async -> [CryptoDTO] {
         return mockDTOs
     }
+    func fetchWeeklyChart(for symbol: String) async throws -> [PricePoint] {
+        return []
+    }
 }
 
 // 2. Фейковое хранилище: просто держит массив в памяти без SwiftData
