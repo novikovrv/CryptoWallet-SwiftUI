@@ -17,3 +17,9 @@ protocol CryptoStorageServiceProtocol {
     func fetchLocalCoins() -> [Coin]
     func saveCoins(_ coins: [Coin])
 }
+
+protocol KeychainServiceProtocol {
+    func save(_ value: String, service: String, account: String) -> Bool
+    func read(service: String, account: String) -> String?
+    func delete(service: String, account: String) -> Bool
+}

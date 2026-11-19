@@ -13,6 +13,8 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var viewModel = CryptoViewModel()
     
+    var onLogout: () -> Void
+    
     private var totalBalance: Double {
         viewModel.coins.reduce(0) { $0 + $1.price }
     }
@@ -50,14 +52,25 @@ struct ContentView: View {
                 CoinDetailView(coin:selectedCoin)
                 
             }
+            // 2. Добавляем кнопку выхода в правый верхний угол NavigationStack
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        onLogout()
+                    } label: {
+                        Image(systemName: "rectangle.portrait.and.arrow.right")
+                            .foregroundColor(.red)
+                    }
+                }
+            }
             .task {
                 let realRepository = CryptoRepository(context: modelContext)
                 viewModel.updateRepository(with: realRepository)
                 viewModel.fetchLocalCoins()
-//                while !Task.isCancelled {
-//                    await viewModel.loadCryptoData()
-//                    try? await Task.sleep(for: .seconds(30))
-//                }
+                while !Task.isCancelled {
+                    await viewModel.loadCryptoData()
+                    try? await Task.sleep(for: .seconds(30))
+                }
             }
             .refreshable {
                 await viewModel.loadCryptoData()
@@ -92,7 +105,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(onLogout: {})
     // Создает временную базу SwiftData в оперативной памяти специально для холста
         .modelContainer(for: SDCoin.self, inMemory: true)
     

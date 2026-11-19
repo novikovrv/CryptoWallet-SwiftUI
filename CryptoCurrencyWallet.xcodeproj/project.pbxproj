@@ -41,6 +41,13 @@
 			);
 			target = 1D9957A3307502F900A07820 /* CryptoCurrencyWallet */;
 		};
+		1DDFD31C30AB1C7D00FD09CB /* Exceptions for "Security" folder in "CryptoCurrencyWallet" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				KeychainManager.swift,
+			);
+			target = 1D9957A3307502F900A07820 /* CryptoCurrencyWallet */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -90,6 +97,19 @@
 			path = Contracts;
 			sourceTree = "<group>";
 		};
+		1DDFD32530AB2DE700FD09CB /* AuthView */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AuthView;
+			sourceTree = "<group>";
+		};
+		1DED96D630A702570031E0A0 /* Security */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1DDFD31C30AB1C7D00FD09CB /* Exceptions for "Security" folder in "CryptoCurrencyWallet" target */,
+			);
+			path = Security;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,7 +132,7 @@
 				1D9957A6307502F900A07820 /* CryptoCurrencyWallet */,
 				1DBEB366309C7C6C00F486F2 /* CryptoCurrencyWalletTests */,
 				1D9957A5307502F900A07820 /* Products */,
-				1D9957B53075039700A07820 /* View */,
+				1DDFD32330AB2DBC00FD09CB /* View */,
 				1D9957B7307503AA00A07820 /* ViewModel */,
 				1D7B69F5309B39D100A2A417 /* Model */,
 				1DBEB36E309DBF0400F486F2 /* Services */,
@@ -132,10 +152,20 @@
 		1DBEB36E309DBF0400F486F2 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				1DED96D630A702570031E0A0 /* Security */,
 				1DBEB3C530A1CC3000F486F2 /* Contracts */,
 				1DBEB370309DBF4800F486F2 /* Storage */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		1DDFD32330AB2DBC00FD09CB /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1DDFD32530AB2DE700FD09CB /* AuthView */,
+				1D9957B53075039700A07820 /* View */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -157,6 +187,7 @@
 				1D9957A6307502F900A07820 /* CryptoCurrencyWallet */,
 				1D9957B53075039700A07820 /* View */,
 				1D9957B7307503AA00A07820 /* ViewModel */,
+				1DDFD32530AB2DE700FD09CB /* AuthView */,
 			);
 			name = CryptoCurrencyWallet;
 			productName = CryptoCurrencyWallet;
